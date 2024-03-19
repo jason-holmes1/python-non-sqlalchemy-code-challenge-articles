@@ -1,3 +1,4 @@
+#? creates and returns a new article given a magazine and title
 class Article:
     all = []
     def __init__(self, author, magazine, title: str):
@@ -7,7 +8,7 @@ class Article:
         self._author = author
         self._magazine = magazine
         Article.all.append(self)
-
+#?getter and setter methods for author, magazine, and title
     @property
     def title(self):
         return self._title
@@ -29,7 +30,7 @@ class Article:
         self._magazine = magazine
         
    
-    
+#? Creates an author Object
 class Author:
     def __init__(self, name: str, magazine=None, title=None):
         if not isinstance(name, str) or len(name) <= 0:
@@ -37,7 +38,7 @@ class Author:
         self._name = name
         self._magazine = magazine
         self._title = title
-
+#?getter and setter methods for name, magazine, and title
     @property
     def name(self):
         return self._name
@@ -57,27 +58,29 @@ class Author:
     @title.setter
     def title(self, title):
         self._title = title
-
+#? returns a list of all articles written by the author
     def articles(self):
         return [article for article in Article.all if article.author == self]
-    
+#?returns a list of all magazines the author has written for
     def magazines(self):
         return list(set([article.magazine for article in Article.all if article.author == self]))
 
-
+#?creates and returns a new article given a magazine and title
     def add_article(self, magazine, title):
         new_article = Article(self,magazine,title)
         return new_article
-        
+#?returns a list of topic areas for all articles by author     
     def topic_areas(self):
         if Author.articles(self) == []:
             return None
         return list(set([magazine.category for magazine in self.magazines()]))
+#? creates a magazine object
 class Magazine:
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
+#?getter and setter methods for name and category
     @property
     def name(self):
         return self._name
@@ -94,17 +97,18 @@ class Magazine:
         if not isinstance(new_category, str) or len(new_category) <= 0:
             raise ValueError("Category must be a string of length greater than 0")
         self._category = new_category
+#?returns a list of all articles in the magazine        
     def articles(self):
         return [article for article in Article.all if article.magazine == self]
-        
+#?returns a list of all authors who have contributed to the magazine       
     def contributors(self):
         return list(set([article.author for article in Article.all if article.magazine == self]))
-        
+#?returns list of titles strings of all articles written for that magazine      
     def article_titles(self):
         if Magazine.articles(self) == []:
             return None
         return [article.title for article in Magazine.articles(self)]
-        
+#?returns author list who have written more than 2 articles for the magazine   
     def contributing_authors(self):
         d ={Author: 0}
         for article in self.articles():
